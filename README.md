@@ -1,10 +1,10 @@
 # A simple code viewer
 ## Features:
-web
-local files
-self-hosting
-high light code
-fast
+- web
+- local files
+- self-hosting
+- high light code
+- fast
 ## docker-cli(recommend)
 
 ```
