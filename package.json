@@ -1,0 +1,25 @@
+{
+  "name": "@chengde/code-viewer",
+  "exports": {
+    ".": "./dist/index.mjs"
+  },
+  "type": "module",
+  "scripts": {
+    "dev": "tsx --env-file=.env watch src/index.ts ",
+    "build": "npm run build-tailwind && npm run build-js",
+    "build-js": "npx pkgroll",
+    "build-tailwind": "npx tailwindcss -i ./src/global.css -o ./static/tailwind.css",
+    "watch-tailwind": "npx tailwindcss -i ./src/global.css -o ./static/tailwind.css --watch"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.11.0",
+    "hono": "^4.2.5",
+    "tailwindcss": "^3.4.3",
+    "tailwindcss-safe-area": "^0.5.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.17",
+    "pkgroll": "^2.0.2",
+    "tsx": "^4.7.1"
+  }
+}
