@@ -8,6 +8,7 @@ import { streamText } from "hono/streaming";
 import type { StreamingApi } from "hono/utils/stream";
 import { spawn } from "node:child_process";
 import { logger } from "hono/logger";
+import dayjs from "dayjs";
 
 export const app = new Hono();
 
@@ -53,18 +54,34 @@ app
 			}
 
 			const files = await readdir(path);
+			const filesInfo = await Promise.all(
+				files.map(async (i) => {
+					const fileStat = await lstat(`${path}/${i}`);
+
+					return {
+						name: i,
+						isDirectory: fileStat.isDirectory(),
+						modifyTime: dayjs(fileStat.mtime).format("YYYY-MM-DD"),
+					};
+				}),
+			);
 
 			return c.html(
 				<Layout title={"index"} description={""} image={""}>
 					{/* <div class='w-dvw'>class="w-dvw"</div> */}
 					<div class="px-2 py-1 text-lg block ">pwd: {q === "" ? "/" : q}</div>
 					<div class={"flex flex-col divide-y mt-2"}>
-						{files.map((i) => (
+						{filesInfo.map((i) => (
 							<a
-								class={"px-2 py-1 block text-lg break-all"}
-								href={`/?q=${`${q}/${i}`}`}
+								class={
+									"px-2 py-1 block text-lg break-all flex flex-row justify-between"
+								}
+								href={`/?q=${`${q}/${i.name}`}`}
 							>
-								{i}
+								<div>
+									{i.name} {i.isDirectory && " [dir]"}
+								</div>
+								<div>{i.modifyTime}</div>
 							</a>
 						))}
 					</div>
